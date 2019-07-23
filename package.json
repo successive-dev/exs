@@ -2,5 +2,11 @@
   "name": "exs",
   "version": "1.0.0",
   "main": "index.js",
-  "license": "MIT"
+  "license": "MIT",
+  "dependencies": {
+    "commander": "^2.20.0",
+    "inquirer": "^6.5.0"
+  },
+  "preferGlobal": true,
+  "bin": "./extract.js"
 }
