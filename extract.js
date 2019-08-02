@@ -2,7 +2,6 @@
 
 const program = require('commander');
 const extractor = require('./extractor');
-let prompt = require('co-prompt');
 
 var stdin = '';
 
