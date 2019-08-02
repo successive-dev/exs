@@ -1,8 +1,9 @@
 const fs = require('fs');
 const path = require('path');
+const yaml = require('js-yaml');
 
 function readFile(fileName) {
-  return JSON.parse(fs.readFileSync(path.resolve(__dirname, fileName), 'utf8'));
+  return JSON.parse(fs.readFileSync(path.resolve(fileName), 'utf8'));
 }
 
 function retrieveSecret(obj) {
@@ -10,9 +11,28 @@ function retrieveSecret(obj) {
   return secrets;
 }
 function extractor(fileName, outFileName) {
-  const file = readFile(fileName);
+  let file = '';
+  // if fileName is not a file but the whole file instead
+  if (fileName.length <= 200) {
+    file = readFile(fileName);
+  } else {
+    file = JSON.parse(fileName);
+  }
   const secrets = retrieveSecret(file);
-  fs.writeFileSync(path.resolve(__dirname, outFileName), secrets);
+  try {
+    var doc = yaml.safeLoad(secrets);
+    // console.log(doc);
+  } catch (e) {
+    console.log(e);
+  }
+  const yamldoc = yaml.safeDump(doc, {
+    'styles': {
+      '!!null': 'canonical' // dump null as ~
+    }
+  });
+
+
+  fs.writeFileSync(path.resolve(outFileName), yamldoc);
 }
 
 module.exports = extractor;
